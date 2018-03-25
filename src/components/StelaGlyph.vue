@@ -17,7 +17,7 @@
       drawGlyph(canvasContext, image) {
         image.onload = ()=> {
           canvasContext.drawImage(image, 0, 0);
-        this.$store.state.currentGlyphData = this.canvasDrawGlyphCtx.getImageData(0, 0, this.canvasDrawGlyph.width, this.canvasDrawGlyph.height).data;
+          this.$store.state.currentGlyphData = this.canvasDrawGlyphCtx.getImageData(0, 0, this.canvasDrawGlyph.width, this.canvasDrawGlyph.height).data;
         }
       }
     },
@@ -29,6 +29,8 @@
       this.canvasDrawGlyph.width = 1799;
       this.canvasDrawGlyph.height = 604;
       this.drawGlyph(this.canvasDrawGlyphCtx, glyphImage);
+      console.log(glyphImage);
+      console.log(document.baseURI);
     }
   }
 </script>
