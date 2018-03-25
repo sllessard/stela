@@ -8,7 +8,8 @@
       return{
         canvasTrace: '',
         canvasTraceCtx: '',
-        mouse: {x: 0, y: 0}
+        mouse: {x: 0, y: 0},
+        alertMessage: ''
       }
     },
     computed: {
@@ -17,9 +18,10 @@
       }
     },
     methods:{
-      glyphArea() {
+      canvasOpaquePixels() {
+        //Counts canvas opdaue pixels. Starts at 3 to track 'a' of rgba
         let opaquePixels = 0;
-        for(let i = 0, dataLength = this.glyphData.length; i < dataLength; i+=4) {
+        for(let i = 3, dataLength = this.glyphData.length; i < dataLength; i+=4) {
           if (this.glyphData[i] > 0) {
             opaquePixels++;
           }
@@ -27,14 +29,14 @@
         return opaquePixels;
       },
       checkBoundaries(userPathData) {
-        //Check if user path exited glyph
+        //Check if user path exited glyph by comparing opaque pixels of two canvases
         let opaquePixels = 0;
-        for(let i = 0, il = userPathData.length; i < il; i+=4) {
+        for(let i = 3, il = userPathData.length; i < il; i+=4) {
           if (userPathData[i] > 0) {
             if (this.glyphData[i] > 0) {
              opaquePixels++;
             } else {
-              alert('Failed: Path outside glyph');
+              this.alertMessage += 'Outside of boundary.';
               break;
             }
           }
@@ -42,12 +44,15 @@
         this.checkFill(opaquePixels);
       },
       checkFill(userPath) {
-        let glyphRatioArea = this.glyphArea()/85;
-
+        //Compare number of opaque pixels between two canvases to determine if user has satisfactorily traced 
+        let glyphRatioArea = this.canvasOpaquePixels()/85;
         if(userPath < glyphRatioArea || userPath > (2 * glyphRatioArea) ) {
-          alert('Failed: Path Incomplete')
+          this.alertMessage += 'Path Incomplete.';
+          console.log(this.alertMessage);
+          alert(`Failed: ${this.alertMessage}`);
         } else {
-          alert('Passed: Path complete and inside glyph')
+          this.alertMessage += 'Path complete and inside boundary';
+          alert(`Passed: ${this.alertMessage}`);
         }
       },
       clearCanvas() {
@@ -80,8 +85,6 @@
       this.canvasTraceCtx.lineJoin = 'round';
       this.canvasTraceCtx.lineCap = 'round';
       this.canvasTraceCtx.strokeStyle = 'rgba(255, 200, 100, 1)';
-
-
 
       this.canvasTrace.addEventListener('mousemove', (e)=> {
         this.mouse.x = e.pageX - this.canvasTrace.offsetLeft;
