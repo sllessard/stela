@@ -2,7 +2,7 @@
 
 Stela is a web-based puzzle and translation game built in Vue.js.
 
-_In development_** : All current content is for development purposes only and does not reflect the final product.
+**_In development_** : All current content is for development purposes only and does not reflect the final product.
 
 Planned Features:
 * Hand drawn illustrations
