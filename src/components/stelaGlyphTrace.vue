@@ -44,10 +44,10 @@
           if (userPathData[i] > 0) {
             if (this.glyphData[i] > 0) {
              opaquePixels++;
-            } else {
+            } /*else {
               this.alertMessage += ' Outside of boundary.';
               break;
-            }
+            }*/
           }
         }
         this.checkFill(opaquePixels);
@@ -57,7 +57,7 @@
         let glyphRatioArea = this.canvasOpaquePixels()/85;
         if(userPath < glyphRatioArea || userPath > (2 * glyphRatioArea) ) {
           this.alertMessage += ' Path Incomplete.';
-          alert(`Failed:${this.alertMessage}`);
+          /*alert(`Failed:${this.alertMessage}`);*/
         } else {
           this.alertMessage += 'Path complete and inside boundary';
           alert(`Passed: ${this.alertMessage}`);

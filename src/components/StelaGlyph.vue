@@ -1,6 +1,6 @@
 <template>
   <div>
-    <canvas :id="canvasId + '_glyph'" :style="glyphInlineStyle"></canvas>
+    <canvas :id="canvasId + '_glyph'" class="sceneGlyph" :style="glyphInlineStyle"></canvas>
   </div>
 </template>
 
@@ -10,7 +10,6 @@
       return {
         canvasDrawGlyph: '',
         canvasDrawGlyphCtx: ''
-
       }
     },
     props: ['canvasId', 'glyphObject'],
@@ -39,8 +38,9 @@
   }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   canvas {
+      opacity: .1;
       position: absolute;
     }
 </style>

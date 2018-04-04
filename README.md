@@ -1,6 +1,15 @@
-# stella
+# Stela
 
-> Stella game
+Stela is a web-based puzzle and translation game built in Vue.js.
+
+_In development_** : All current content is for development purposes only and does not reflect the final product.
+
+Planned Features:
+* Hand drawn illustrations
+* Scrolling:
+..* Accelerometer and gyroscope scrolling
+..* Smooth continuous scrolling while within scroll zones
+* Saving (method TBD)
 
 ## Build Setup
 
