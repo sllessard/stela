@@ -1,8 +1,13 @@
 <template>
-    <canvas id="river_trace" @mousedown="startTrace" style="z-index: 100;"></canvas>
+    <canvas :id="canvasId + '_trace'" 
+            @mousedown="startTrace" 
+            @mouseup="stopTrace"
+            :style="glyphInlineStyle">
+    </canvas>
 </template>
 
 <script>
+  import canvasConfig from '../stela/config.js';
   export default {
     data() {
       return{
@@ -12,9 +17,13 @@
         alertMessage: ''
       }
     },
+    props: ['canvasId', 'glyphObject'],
     computed: {
       glyphData() {
-        return this.$store.state.currentGlyphData;
+        return this.glyphObject.gylphData;
+      },
+      glyphInlineStyle() {
+        return 'top: ' + this.glyphObject.position.y + 'px; left: ' + this.glyphObject.position.x + 'px; z-index: 100;'
       }
     },
     methods:{
@@ -36,7 +45,7 @@
             if (this.glyphData[i] > 0) {
              opaquePixels++;
             } else {
-              this.alertMessage += 'Outside of boundary.';
+              this.alertMessage += ' Outside of boundary.';
               break;
             }
           }
@@ -47,9 +56,8 @@
         //Compare number of opaque pixels between two canvases to determine if user has satisfactorily traced 
         let glyphRatioArea = this.canvasOpaquePixels()/85;
         if(userPath < glyphRatioArea || userPath > (2 * glyphRatioArea) ) {
-          this.alertMessage += 'Path Incomplete.';
-          console.log(this.alertMessage);
-          alert(`Failed: ${this.alertMessage}`);
+          this.alertMessage += ' Path Incomplete.';
+          alert(`Failed:${this.alertMessage}`);
         } else {
           this.alertMessage += 'Path complete and inside boundary';
           alert(`Passed: ${this.alertMessage}`);
@@ -61,15 +69,14 @@
       stopTrace() {
         this.canvasTrace.removeEventListener('mousemove', this.draw, false);
         let userPathData = this.canvasTraceCtx.getImageData(0, 0, this.canvasTrace.width, this.canvasTrace.height).data;
-        /*let glyphImageData = (this.canvasDrawGlyphCtx.getImageData(0, 0, this.canvasTrace.width, this.canvasTrace.height).data);*/
         this.clearCanvas();
         this.checkBoundaries(userPathData);
       },
       startTrace() {
+        this.alertMessage = '';
         this.canvasTraceCtx.beginPath();
         this.canvasTraceCtx.moveTo(this.mouse.x, this.mouse.y);
         this.canvasTrace.addEventListener('mousemove', this.draw, false);
-        this.canvasTrace.addEventListener('mouseup', this.stopTrace, false);
       },
       draw() {
         this.canvasTraceCtx.lineTo(this.mouse.x, this.mouse.y);
@@ -77,14 +84,14 @@
       },
     },
     mounted: function() {
-      this.canvasTrace = document.getElementById('river_trace');
+      this.canvasTrace = document.getElementById(this.canvasId + '_trace');
       this.canvasTraceCtx = this.canvasTrace.getContext('2d');
-      this.canvasTrace.width = 1799;
-      this.canvasTrace.height = 604;
-      this.canvasTraceCtx.lineWidth = 1;
-      this.canvasTraceCtx.lineJoin = 'round';
-      this.canvasTraceCtx.lineCap = 'round';
-      this.canvasTraceCtx.strokeStyle = 'rgba(255, 200, 100, 1)';
+      this.canvasTrace.width = this.glyphObject.gifDimensions.width;
+      this.canvasTrace.height = this.glyphObject.gifDimensions.height;
+      this.canvasTraceCtx.lineWidth = canvasConfig.stelaLineWidth;
+      this.canvasTraceCtx.lineJoin = canvasConfig.stelaLineJoin;
+      this.canvasTraceCtx.lineCap = canvasConfig.stelaLineCap;
+      this.canvasTraceCtx.strokeStyle = canvasConfig.stelaStrokeStyle;
 
       this.canvasTrace.addEventListener('mousemove', (e)=> {
         this.mouse.x = e.pageX - this.canvasTrace.offsetLeft;
@@ -97,5 +104,7 @@
 </script>
 
 <style lang="scss" scoped>
-  
+  canvas {
+    position: absolute;
+  }
 </style>

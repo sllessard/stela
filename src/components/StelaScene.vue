@@ -1,44 +1,35 @@
 <template>
   <div>
-    <div v-for="glyph in glyphs">
-      <scene-glyph>
-        <canvas id="glyph_river"></canvas>
-      </scene-glyph>
-      <scene-glyph-trace></scene-glyph-trace>
+    <img :src="sceneSrc" alt="Scene" class="scene">
+    <div v-for="(glyph, key) in glyphs">
+      <scene-glyph :canvasId="key" :glyphObject="glyph"></scene-glyph>
+      <scene-glyph-trace :canvasId="key" :glyphObject="glyph"></scene-glyph-trace>
     </div>
   </div>
 </template>
 
 <script>
+  import sceneLayout from '../stela/stela_build.js';
   import sceneGlyph from './StelaGlyph.vue';
-  import sceneGlyphTrace from './StelaGlyphTrace.vue'
+  import sceneGlyphTrace from './StelaGlyphTrace.vue';
   export default {
     data() {
       return {
         glyphFound: false,
-        glyphs: ['river_glyph'],
+        glyphs: this.$store.state.currentScene.glyphs,
+        sceneSrc: this.$store.state.currentScene.sceneImage
       }
     },
-    computed: {
-
-    },
-    methods: {
-
-    },
-  components: {
-    sceneGlyph,
-    sceneGlyphTrace
+    components: {
+      sceneGlyph,
+      sceneGlyphTrace
+    }
   }
-  }
-  
 </script>
 
 <style lang="scss" scoped>
   canvas {
-    border: 1px solid black;
-    left: 0;
     position: absolute;
-    top: 0;
   }
   
 </style>

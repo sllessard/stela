@@ -1,6 +1,6 @@
 <template>
   <div>
-    <slot></slot>
+    <canvas :id="canvasId + '_glyph'" :style="glyphInlineStyle"></canvas>
   </div>
 </template>
 
@@ -13,28 +13,34 @@
 
       }
     },
+    props: ['canvasId', 'glyphObject'],
+    computed: {
+      glyphInlineStyle() {
+        return 'top: ' + this.glyphObject.position.y + 'px; left: ' + this.glyphObject.position.x + 'px; z-index: 100;'
+      }
+    },
     methods: {
       drawGlyph(canvasContext, image) {
         image.onload = ()=> {
           canvasContext.drawImage(image, 0, 0);
-          this.$store.state.currentGlyphData = this.canvasDrawGlyphCtx.getImageData(0, 0, this.canvasDrawGlyph.width, this.canvasDrawGlyph.height).data;
+          this.glyphObject.gylphData = this.canvasDrawGlyphCtx.getImageData(0, 0, this.canvasDrawGlyph.width, this.canvasDrawGlyph.height).data;
         }
       }
     },
     mounted: function() {
       let glyphImage = new Image();
-      glyphImage.src = require('../assets/glyph-river.gif');
-      this.canvasDrawGlyph = document.getElementById('glyph_river')
+      glyphImage.src = require('../assets/' + this.glyphObject.glyphImage);
+      this.canvasDrawGlyph = document.getElementById(this.canvasId + '_glyph');
       this.canvasDrawGlyphCtx = this.canvasDrawGlyph.getContext('2d');
-      this.canvasDrawGlyph.width = 1799;
-      this.canvasDrawGlyph.height = 604;
+      this.canvasDrawGlyph.width = this.glyphObject.gifDimensions.width;
+      this.canvasDrawGlyph.height = this.glyphObject.gifDimensions.height;
       this.drawGlyph(this.canvasDrawGlyphCtx, glyphImage);
-      console.log(glyphImage);
-      console.log(document.baseURI);
     }
   }
 </script>
 
 <style lang="scss">
-  
+  canvas {
+      position: absolute;
+    }
 </style>
