@@ -1,4 +1,5 @@
 export default {
+/*Settings for canvas drawing*/
     stelaLineWidth: 1,
     stelaLineJoin: 'round',
     stelaLineCap: 'round',

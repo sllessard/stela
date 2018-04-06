@@ -1,4 +1,8 @@
 <template>
+<!-- 
+Canvas for trace mechanic:
+  - Positioned over scene where glyphs exist
+-->
     <canvas :id="canvasId + '_trace'" 
             @mousedown="startTrace" 
             @mouseup="stopTrace"
@@ -14,21 +18,20 @@
         canvasTrace: '',
         canvasTraceCtx: '',
         mouse: {x: 0, y: 0},
-        alertMessage: ''
+        alertMessage: '',
+        glyphInlineStyle: `top: ${this.glyphObject.position.y}px; left: ${this.glyphObject.position.x}px; z-index: 100;` 
       }
     },
     props: ['canvasId', 'glyphObject'],
     computed: {
       glyphData() {
+        /*Gets this glyph objects image data set in StelaGlyph.vue*/
         return this.glyphObject.gylphData;
-      },
-      glyphInlineStyle() {
-        return 'top: ' + this.glyphObject.position.y + 'px; left: ' + this.glyphObject.position.x + 'px; z-index: 100;'
       }
     },
     methods:{
       canvasOpaquePixels() {
-        //Counts canvas opdaue pixels. Starts at 3 to track 'a' of rgba
+        //Counts canvas opaque pixels. Starts at 3 to track 'a' of rgba
         let opaquePixels = 0;
         for(let i = 3, dataLength = this.glyphData.length; i < dataLength; i+=4) {
           if (this.glyphData[i] > 0) {
@@ -64,15 +67,18 @@
         }
       },
       clearCanvas() {
+        //Removes the users tracing
         this.canvasTraceCtx.clearRect(0, 0, this.canvasTrace.width, this.canvasTrace.height);
       },
       stopTrace() {
+        //Stops drawing on canvas
         this.canvasTrace.removeEventListener('mousemove', this.draw, false);
         let userPathData = this.canvasTraceCtx.getImageData(0, 0, this.canvasTrace.width, this.canvasTrace.height).data;
         this.clearCanvas();
         this.checkBoundaries(userPathData);
       },
       startTrace() {
+        //Start drawing on canvas
         this.alertMessage = '';
         this.canvasTraceCtx.beginPath();
         this.canvasTraceCtx.moveTo(this.mouse.x, this.mouse.y);
@@ -84,6 +90,7 @@
       },
     },
     mounted: function() {
+      //Set up canvas for drawing
       this.canvasTrace = document.getElementById(this.canvasId + '_trace');
       this.canvasTraceCtx = this.canvasTrace.getContext('2d');
       this.canvasTrace.width = this.glyphObject.gifDimensions.width;

@@ -1,4 +1,8 @@
 <template>
+<!-- 
+Hidden glyphs that will not be displayed. 
+Gylphs are used for comparison to users tracing of in scene glyph.
+-->
   <div>
     <canvas :id="canvasId + '_glyph'" class="sceneGlyph" :style="glyphInlineStyle"></canvas>
   </div>
@@ -9,16 +13,13 @@
     data() {
       return {
         canvasDrawGlyph: '',
-        canvasDrawGlyphCtx: ''
+        canvasDrawGlyphCtx: '',
+        glyphInlineStyle: `top: ${this.glyphObject.position.y}px; left: ${this.glyphObject.position.x}px; z-index: 50;` 
       }
     },
     props: ['canvasId', 'glyphObject'],
-    computed: {
-      glyphInlineStyle() {
-        return 'top: ' + this.glyphObject.position.y + 'px; left: ' + this.glyphObject.position.x + 'px; z-index: 100;'
-      }
-    },
     methods: {
+      /*Creates glyph image on canvas and adds canvas image data to appropriate object*/
       drawGlyph(canvasContext, image) {
         image.onload = ()=> {
           canvasContext.drawImage(image, 0, 0);
@@ -27,6 +28,7 @@
       }
     },
     mounted: function() {
+      /*Set up canvas for drawGlyph method*/
       let glyphImage = new Image();
       glyphImage.src = require('../assets/' + this.glyphObject.glyphImage);
       this.canvasDrawGlyph = document.getElementById(this.canvasId + '_glyph');

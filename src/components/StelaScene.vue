@@ -1,4 +1,5 @@
 <template>
+<!-- Scene is hand drawn illustration stelaGlyph and stelaGlyphTrace are set in relation to scene-->
   <div>
     <img :src="sceneSrc" alt="Scene" class="scene">
     <div v-for="(glyph, key) in glyphs">
@@ -9,7 +10,6 @@
 </template>
 
 <script>
-  import sceneLayout from '../stela/stela_build.js';
   import sceneGlyph from './StelaGlyph.vue';
   import sceneGlyphTrace from './StelaGlyphTrace.vue';
   export default {
@@ -31,5 +31,4 @@
   canvas {
     position: absolute;
   }
-  
 </style>
