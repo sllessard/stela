@@ -6,8 +6,16 @@ Stela display and scenes:
   - Clicking <area> @click sets currentScene in store
  -->
   <div>
+    <div class="nav-icons">
+      <span @click="goBack" v-if="!showStela">
+        <i class="fas fa-arrow-left">
+        </i>
+      </span>
+      <!-- <i class="fas fa-undo"></i> -->
+    </div>
     <div v-if="showStela">
-      <img  usemap="#primary" 
+      <img  class="stela"
+            usemap="#primary" 
             src="../assets/stela.jpg" />
 
       <map v-for="(scene, key) in stelaScenes" name="primary">
@@ -40,6 +48,10 @@ Stela display and scenes:
       glyphSelector(mapAreaClicked) {
         this.$store.state.onStela = false;
         this.$store.state.currentScene = mapAreaClicked;
+      },
+      goBack() {
+        this.$store.state.onStela = true;
+        window.scrollTo(0,0);
       }
     }
   }
@@ -48,6 +60,28 @@ Stela display and scenes:
 <style lang="scss">
   area {
     cursor: pointer;
+  }
+
+  .nav-icons {
+    display: flex;
+    justify-content: center;
+    position: fixed;
+    top: 60px;
+    left: 0;
+    width: 100%;
+    z-index: 6000;
+
+    svg {
+      cursor: pointer;
+      path {
+        fill: white;
+      }
+    }
+  }
+
+  .stela {
+    display: block;
+    margin: auto;
   }
   
 </style>
