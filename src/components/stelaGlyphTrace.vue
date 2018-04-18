@@ -25,7 +25,7 @@ Canvas for trace mechanic:
     props: ['canvasId', 'glyphObject'],
     computed: {
       glyphData() {
-        /*Gets this glyph objects image data set in StelaGlyph.vue*/
+        //Gets this glyph objects image data set in StelaGlyph.vue
         return this.glyphObject.gylphData;
       }
     },
@@ -47,10 +47,10 @@ Canvas for trace mechanic:
           if (userPathData[i] > 0) {
             if (this.glyphData[i] > 0) {
              opaquePixels++;
-            } /*else {
+            } else {
               this.alertMessage += ' Outside of boundary.';
               break;
-            }*/
+            }
           }
         }
         this.checkFill(opaquePixels);
@@ -60,10 +60,10 @@ Canvas for trace mechanic:
         let glyphRatioArea = this.canvasOpaquePixels()/85;
         if(userPath < glyphRatioArea || userPath > (2 * glyphRatioArea) ) {
           this.alertMessage += ' Path Incomplete.';
-          /*alert(`Failed:${this.alertMessage}`);*/
+          console.log(`${this.alertMessage}`);
         } else {
           this.alertMessage += 'Path complete and inside boundary';
-          alert(`Passed: ${this.alertMessage}`);
+          console.log(`${this.alertMessage}`);
         }
       },
       clearCanvas() {

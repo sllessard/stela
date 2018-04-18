@@ -21,6 +21,11 @@ export default {
   components: {
     stelaStone
   },
+  computed: {
+    scrollThreshold() {
+      return this.viewportWidth * 0.10;
+    }
+  },
   methods: {
     mousePosition(e) {
       let horizontalMousePosition = e.clientX;
@@ -28,17 +33,17 @@ export default {
 
       clearInterval(this.interval);
 
-      if(horizontalMousePosition + 120 >= this.viewportWidth){
+      if(horizontalMousePosition + this.scrollThreshold >= this.viewportWidth){
         this.scrollHorizontal = 1;
-      } else if (horizontalMousePosition - 120 <= 0){
+      } else if (horizontalMousePosition - this.scrollThreshold <= 0){
        this.scrollHorizontal = -1;
       } else {
         this.scrollHorizontal = 0;
       }
 
-      if(verticalMousePosition + 120 >= this.viewportHeight){
+      if(verticalMousePosition + this.scrollThreshold >= this.viewportHeight){
         this.scrollVertical = 1;
-      } else if (verticalMousePosition - 120 <= 0){
+      } else if (verticalMousePosition - this.scrollThreshold <= 0){
         this.scrollVertical = -1;
       } else {
         this.scrollVertical = 0;
@@ -49,7 +54,7 @@ export default {
     scrollHandler(x, y) {
       this.interval = setInterval(()=>{
         window.scrollBy(x, y);
-      }, 0);
+      }, 2);
     }
 },
 mounted() {
